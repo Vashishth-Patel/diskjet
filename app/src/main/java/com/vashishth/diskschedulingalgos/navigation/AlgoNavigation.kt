@@ -36,6 +36,13 @@ fun AlgoNavigation(){
             //here we pass where this should lead us to
             AlgoDetailScreen(navController = navController,backStackEntry.arguments?.getString("algo"))
         }
+        composable(Screen.homeDetailScreen.route+"/{detail}",
+            arguments = listOf(navArgument(name = "detail"){type = NavType.StringType})){
+                backStackEntry ->
+
+            //here we pass where this should lead us to
+            homeDetailScreen(navController = navController,backStackEntry.arguments?.getString("detail"))
+        }
         composable(Screen.GraphScreen.route){
             //here we pass where this should lead us to
             GraphScreen(navController = navController)

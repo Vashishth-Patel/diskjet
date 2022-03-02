@@ -58,3 +58,4 @@ fun getAlgos():List<Algorithm>{
             darkColor = Beige3),
     )
 }
+

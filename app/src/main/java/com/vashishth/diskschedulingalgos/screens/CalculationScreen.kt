@@ -72,7 +72,7 @@ fun CalculationScreen(navController: NavController) {
     ) { contentpaddingvalues ->
         Surface(
             modifier = Modifier.fillMaxSize(),
-            color = MaterialTheme.colors.background
+            color = Color.Black
         ) {
             Column {
                 InputCard(contentPaddingValues = contentpaddingvalues)
@@ -112,7 +112,7 @@ fun InputCard(onValChange: (String) -> Unit = {}, contentPaddingValues: PaddingV
         modifier = Modifier
             .fillMaxWidth()
             .padding(10.dp),
-        color = colorResource(id = R.color.lightblack),
+        color = Color.Black,
         shape = RoundedCornerShape(corner = CornerSize(8.dp))
     ) {
         Column(

@@ -3,6 +3,7 @@ package com.vashishth.diskschedulingalgos.screens
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.MaterialTheme
@@ -25,8 +26,12 @@ import androidx.navigation.NavController
 import com.vashishth.diskschedulingalgos.DiskImg
 import com.vashishth.diskschedulingalgos.R
 import com.vashishth.diskschedulingalgos.component.BottomNavigationBar
+import com.vashishth.diskschedulingalgos.component.FeatureItem
+import com.vashishth.diskschedulingalgos.component.FeatureItemHome
 import com.vashishth.diskschedulingalgos.component.detailText
 import com.vashishth.diskschedulingalgos.model.BottomNavItem
+import com.vashishth.diskschedulingalgos.model.HomeData
+import com.vashishth.diskschedulingalgos.model.getHomeData
 import com.vashishth.diskschedulingalgos.navigation.Screen
 import com.vashishth.diskschedulingalgos.ui.theme.BlueViolet1
 import com.vashishth.diskschedulingalgos.ui.theme.BlueViolet2
@@ -59,12 +64,12 @@ fun HomeScreen(navController: NavController) {
                 })
         }
     ) {contentpadding ->
-        HomeScreen1(contentPadding = contentpadding )
+        HomeScreen1(contentPadding = contentpadding,navController)
     }
 }
 
 @Composable
-fun HomeScreen1(contentPadding : PaddingValues){
+fun HomeScreen1(contentPadding : PaddingValues,navController: NavController){
     Surface(modifier = Modifier
         .fillMaxWidth()
         .fillMaxHeight(),
@@ -75,29 +80,43 @@ fun HomeScreen1(contentPadding : PaddingValues){
             Spacer(modifier = Modifier.height(50.dp))
             DiskImg()
             Spacer(modifier = Modifier.height(25.dp))
-            LazyColumn (contentPadding = contentPadding){
-                items(1) {
-                    detailText(
-                        title = "Disk Scheduling",
-                        information = "As we know, a process needs two type of time, CPU time and IO time. For I/O, it requests the Operating system to access the disk.\n" +
-                                "\n" +
-                                "However, the operating system must be fare enough to satisfy each request and at the same time, operating system must maintain the efficiency and speed of process execution.\n" +
-                                "\n" +
-                                "The technique that operating system uses to determine the request which is to be satisfied next is called disk scheduling."
-                    )
-                    detailText(
-                        title = "Types of Disk Scheduling Algorithms",
-                        information = "The list of various disks scheduling algorithm is given below. Each algorithm is carrying some advantages and disadvantages. The limitation of each algorithm leads to the evolution of a new algorithm.\n" +
-                                "\n" +
-                                "FCFS scheduling algorithm\n" +
-                                "SSTF (shortest seek time first) algorithm\n" +
-                                "SCAN scheduling\n" +
-                                "C-SCAN scheduling\n" +
-                                "LOOK Scheduling\n" +
-                                "C-LOOK scheduling"
-                    )
+//            LazyColumn (contentPadding = contentPadding){
+//                items(1) {
+//                    detailText(
+//                        title = "Disk Scheduling",
+//                        information = "As we know, a process needs two type of time, CPU time and IO time. For I/O, it requests the Operating system to access the disk.\n" +
+//                                "\n" +
+//                                "However, the operating system must be fare enough to satisfy each request and at the same time, operating system must maintain the efficiency and speed of process execution.\n" +
+//                                "\n" +
+//                                "The technique that operating system uses to determine the request which is to be satisfied next is called disk scheduling."
+//                    )
+//                    detailText(
+//                        title = "Types of Disk Scheduling Algorithms",
+//                        information = "The list of various disks scheduling algorithm is given below. Each algorithm is carrying some advantages and disadvantages. The limitation of each algorithm leads to the evolution of a new algorithm.\n" +
+//                                "\n" +
+//                                "FCFS scheduling algorithm\n" +
+//                                "SSTF (shortest seek time first) algorithm\n" +
+//                                "SCAN scheduling\n" +
+//                                "C-SCAN scheduling\n" +
+//                                "LOOK Scheduling\n" +
+//                                "C-LOOK scheduling"
+//                    )
+//                }
+//            }
+
+            //test
+            var homedata : List<HomeData> = getHomeData()
+            LazyColumn(contentPadding = contentPadding,
+                verticalArrangement = Arrangement.Center){
+                items(items = homedata) {
+                    FeatureItemHome(feature = it){
+                        navController.navigate(route = Screen.homeDetailScreen.route + "/$it")
+                    }
                 }
             }
+
+
+            //test end
         }
     }
 }

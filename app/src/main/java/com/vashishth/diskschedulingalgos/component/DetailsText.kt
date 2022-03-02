@@ -24,13 +24,13 @@ import com.vashishth.diskschedulingalgos.R
 import com.vashishth.diskschedulingalgos.ui.theme.*
 
 @Composable
-fun detailText(title : String,information : String){
+fun detailText(title : String,information : String,bgColor: Color){
     Surface(
         modifier = Modifier
             .padding(15.dp),
         shape = RoundedCornerShape(corner = CornerSize(5.dp)),
         elevation = 5.dp,
-        color = BlueViolet2
+        color = bgColor
     ) {
         Column {
             Row(verticalAlignment = Alignment.CenterVertically) {

@@ -47,7 +47,7 @@ fun MyApp(content: @Composable () -> Unit){
 
 @Composable
 fun DiskImg(){
-    Surface(modifier = Modifier.width(300.dp),
+    Surface(modifier = Modifier.width(300.dp).height(250.dp),
         shape = RoundedCornerShape(corner = CornerSize(5.dp)),
         elevation = 5.dp,
         color = colorResource(id = R.color.white)) {
