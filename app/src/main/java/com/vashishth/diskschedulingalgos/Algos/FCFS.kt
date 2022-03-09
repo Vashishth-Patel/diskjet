@@ -35,13 +35,6 @@ fun FCFS(arr: ArrayList<Int>, head: Int): Int {
 //                "seek operations = " +
 //                seek_count
 //    )
-
-    // Seek sequence would be the same
-    // as request array sequence
-//    println("Seek Sequence is")
-    for (i in 0 until arr.size) {
-        println(arr[i])
-    }
     return seek_count
 }
 

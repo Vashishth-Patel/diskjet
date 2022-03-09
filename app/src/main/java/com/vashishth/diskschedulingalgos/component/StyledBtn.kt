@@ -125,7 +125,7 @@ fun FeatureItemHome(
     BoxWithConstraints(
         modifier = Modifier
             .padding(7.5.dp)
-            .height(200.dp)
+            .height(130.dp)
             .clip(RoundedCornerShape(10.dp))
             .background(feature.darkColor)
     ) {

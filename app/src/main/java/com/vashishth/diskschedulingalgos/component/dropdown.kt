@@ -81,7 +81,8 @@ val items = listOf(
     "FCFS",
     "SSTF",
     "SCAN",
-    "C-SCAN"
+    "C-SCAN L-R",
+    "C-SCAN R-L"
 )
 
 @OptIn(ExperimentalMaterialApi::class)

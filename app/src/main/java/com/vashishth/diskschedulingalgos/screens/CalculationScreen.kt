@@ -1,7 +1,6 @@
 package com.vashishth.diskschedulingalgos.screens
 
 import android.annotation.SuppressLint
-import android.content.Context
 import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.background
@@ -9,6 +8,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
@@ -24,6 +24,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.vashishth.diskschedulingalgos.Algos.*
@@ -105,8 +106,11 @@ fun InputCard(onValChange: (String) -> Unit = {}, contentPaddingValues: PaddingV
     var expanded = remember {
         mutableStateOf(false)
     }
-    var enable = remember {
+    var show = remember {
         mutableStateOf(false)
+    }
+    var enable = remember {
+        mutableStateOf(true)
     }
     Surface(
         modifier = Modifier
@@ -135,11 +139,126 @@ fun InputCard(onValChange: (String) -> Unit = {}, contentPaddingValues: PaddingV
                 modifier = Modifier.fillMaxWidth()
             ) {
                 initialTrack(enabled = enable.value) {
+                    initialTrack = it.toInt()
+                    inputlist = listOf()
+                    arrayList.clear()
                 }
                 tailTrack(enabled = enable.value) {
+                    tailTrack = it.toInt()
+                    inputlist = listOf()
+                    arrayList.clear()
                 }
             }
-            CalciScreen(context = context, tailTrack = tailTrack, initialTrack = initialTrack)
+//            CalciScreen(context = context, tailTrack = tailTrack, initialTrack = initialTrack)
+            //TODO
+            DiskValue() {
+                if (inputlist.contains(it.toInt())) {
+                    Toast.makeText(
+                        context,
+                        "Element is already present in queue",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                } else if (it.toInt() < 0 || it.toInt() > tailTrack) {
+                    Toast.makeText(
+                        context,
+                        "Entered element is not in range defined",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                } else {
+                    inputlist = inputlist + it.toInt()
+                    arrayList.add(it.toInt())
+                    Log.d("input", "$it")
+                }
+            }
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Center
+            ) {
+//trial
+                Button(onClick = {
+                    if(inputlist.isNotEmpty()) {
+                        arrayList.clear()
+                        var i = inputlist.lastIndex
+                        inputlist = inputlist - inputlist[i]
+                        inputlist.forEach {
+                            arrayList.add(it)
+                        }
+                    }
+                }, title = "POP")
+
+                Row(
+                    modifier = Modifier.padding(10.dp),
+                    horizontalArrangement = Arrangement.SpaceAround,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Text(text = "Total Seek Movements :")
+                    Text(text = "${seektime.last()}")
+                }
+                Spacer(modifier = Modifier.height(10.dp))
+                Row(
+                    horizontalArrangement = Arrangement.SpaceAround,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Text("Seek Sequence :", modifier = Modifier.padding(10.dp))
+                    LazyRow(state = rememberLazyListState()) {
+                        items(arrangedList) {
+                            queueItem(it)
+                        }
+                    }
+                }
+            }
+
+            Spacer(modifier = Modifier.height(12.dp))
+
+            Row(
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                TestDropdownMenu()
+                Button(
+                    onClick = {
+                        var tailtrack = tailTrack
+                        if (selectedAlgo.equals("FCFS")) {
+                            //  FCFS
+                            seektime = seektime + FCFS(arrayList, initialTrack)
+                            arrangedList = fcfsSequence(arrayList)
+                            Log.d("fcfs", fcfsSequence(arrayList).toString())
+                        }
+                        if (selectedAlgo.equals("SSTF")) {
+                            //SSTF
+                            seektime = seektime + shortestSeekTimeFirst(arrayList, initialTrack)
+                            arrangedList = sstfSequence(arrayList, initialTrack)
+                            Log.d("sstf", sstfSequence(arrayList, initialTrack).toString())
+                        }
+                        if (selectedAlgo.equals("SCAN")) {
+                            //SCAN
+                            seektime = seektime + SCAN(arrayList, initialTrack, tailtrack)
+                            arrangedList = scanSequence()
+                            Log.d(
+                                "scan",
+                                scanSequence().toString()
+                            )
+                        }
+                        if (selectedAlgo.equals("C-SCAN L-R")) {
+                            //C-Scan
+                            seektime = seektime + CSCAN(arrayList, initialTrack, tailtrack)
+                            arrangedList = cscanSequence(arrayList, initialTrack, tailtrack)
+                            Log.d(
+                                "cscan",
+                                cscanSequence(arrayList, initialTrack, tailTrack).toString()
+                            )
+                        }
+                        if (selectedAlgo.equals("C-SCAN R-L")){
+                            seektime = seektime + CSCANRL(arrayList,initialTrack,tailTrack)
+                            arrangedList = cscanSequenceRl(arrayList,initialTrack,tailTrack)
+                        }
+                    },
+                    title = "Calculate"
+                )
+            }
+            //TODO
+//            SimpleRadioButtonComponent(show = show.value)
+            //TODO
             Spacer(modifier = Modifier.height(10.dp))
             if (arrangedList.isNotEmpty()) {
                 lineChartView()
@@ -317,100 +436,112 @@ fun lineChartView() {
 }
 
 
-@OptIn(ExperimentalComposeUiApi::class)
-@Composable
-fun CalciScreen(context: Context, tailTrack: Int, initialTrack: Int) {
-
-    DiskValue() {
-        if (inputlist.contains(it.toInt())) {
-            Toast.makeText(
-                context,
-                "Element is already present in queue",
-                Toast.LENGTH_SHORT
-            ).show()
-        } else if (it.toInt() < 0 || it.toInt() > tailTrack) {
-            Toast.makeText(
-                context,
-                "Entered element is not in range defined",
-                Toast.LENGTH_SHORT
-            ).show()
-        } else {
-            inputlist = inputlist + it.toInt()
-            arrayList.add(it.toInt())
-            Log.d("input", "$it")
-        }
-    }
-    Column(
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
-    ) {
-        Row(
-            modifier = Modifier.padding(10.dp),
-            horizontalArrangement = Arrangement.SpaceAround,
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Text(text = "Total Seek Movements :")
-            Text(text = "${seektime.last()}")
-        }
-        Spacer(modifier = Modifier.height(10.dp))
-        Row(
-            horizontalArrangement = Arrangement.SpaceAround,
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Text("Seek Sequence :", modifier = Modifier.padding(10.dp))
-            LazyRow(state = rememberLazyListState()) {
-                items(arrangedList) {
-                    queueItem(it)
-                }
-            }
-        }
-    }
-
-    Spacer(modifier = Modifier.height(12.dp))
-
-    Row(
-        horizontalArrangement = Arrangement.SpaceBetween,
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        TestDropdownMenu()
-        Button(
-            onClick = {
-                var tailtrack = tailTrack
-                if (selectedAlgo.equals("FCFS")) {
-                    //  FCFS
-                    seektime = seektime + FCFS(arrayList, initialTrack)
-                    arrangedList = fcfsSequence(arrayList)
-                    Log.d("fcfs", fcfsSequence(arrayList).toString())
-                }
-                if (selectedAlgo.equals("SSTF")) {
-                    //SSTF
-                    seektime = seektime + shortestSeekTimeFirst(arrayList, initialTrack)
-                    arrangedList = sstfSequence(arrayList, initialTrack)
-                    Log.d("sstf", sstfSequence(arrayList, initialTrack).toString())
-                }
-                if (selectedAlgo.equals("SCAN")) {
-                    //SCAN
-                    seektime = seektime + SCAN(arrayList, initialTrack, tailtrack)
-                    arrangedList = scanSequence()
-                    Log.d(
-                        "scan",
-                        scanSequence().toString()
-                    )
-                }
-                if (selectedAlgo.equals("C-SCAN")) {
-                    //C-Scan
-                    seektime = seektime + CSCAN(arrayList, initialTrack, tailtrack)
-                    arrangedList = cscanSequence(arrayList, initialTrack, tailtrack)
-                    Log.d(
-                        "cscan",
-                        cscanSequence(arrayList, initialTrack, tailTrack).toString()
-                    )
-                }
-            },
-            title = "Calculate"
-        )
-    }
-}
+//@OptIn(ExperimentalComposeUiApi::class)
+//@Composable
+//fun CalciScreen(context: Context, tailTrack: Int, initialTrack: Int) {
+//
+//    DiskValue() {
+//        if (inputlist.contains(it.toInt())) {
+//            Toast.makeText(
+//                context,
+//                "Element is already present in queue",
+//                Toast.LENGTH_SHORT
+//            ).show()
+//        } else if (it.toInt() < 0 || it.toInt() > tailTrack) {
+//            Toast.makeText(
+//                context,
+//                "Entered element is not in range defined",
+//                Toast.LENGTH_SHORT
+//            ).show()
+//        } else {
+//            inputlist = inputlist + it.toInt()
+//            arrayList.add(it.toInt())
+//            Log.d("input", "$it")
+//        }
+//    }
+//    Column(
+//        horizontalAlignment = Alignment.CenterHorizontally,
+//        verticalArrangement = Arrangement.Center
+//    ) {
+////trial
+//        Button(onClick = {
+//            if(inputlist.isNotEmpty()) {
+//                arrayList.clear()
+//                var i = inputlist.lastIndex
+//                inputlist = inputlist - inputlist[i]
+//                inputlist.forEach {
+//                    arrayList.add(it)
+//                }
+//            }
+//                         }, title = "POP")
+//
+//        Row(
+//            modifier = Modifier.padding(10.dp),
+//            horizontalArrangement = Arrangement.SpaceAround,
+//            verticalAlignment = Alignment.CenterVertically
+//        ) {
+//            Text(text = "Total Seek Movements :")
+//            Text(text = "${seektime.last()}")
+//        }
+//        Spacer(modifier = Modifier.height(10.dp))
+//        Row(
+//            horizontalArrangement = Arrangement.SpaceAround,
+//            verticalAlignment = Alignment.CenterVertically
+//        ) {
+//            Text("Seek Sequence :", modifier = Modifier.padding(10.dp))
+//            LazyRow(state = rememberLazyListState()) {
+//                items(arrangedList) {
+//                    queueItem(it)
+//                }
+//            }
+//        }
+//    }
+//
+//    Spacer(modifier = Modifier.height(12.dp))
+//
+//    Row(
+//        horizontalArrangement = Arrangement.SpaceBetween,
+//        verticalAlignment = Alignment.CenterVertically
+//    ) {
+//        TestDropdownMenu()
+//        Button(
+//            onClick = {
+//                var tailtrack = tailTrack
+//                if (selectedAlgo.equals("FCFS")) {
+//                    //  FCFS
+//                    seektime = seektime + FCFS(arrayList, initialTrack)
+//                    arrangedList = fcfsSequence(arrayList)
+//                    Log.d("fcfs", fcfsSequence(arrayList).toString())
+//                }
+//                if (selectedAlgo.equals("SSTF")) {
+//                    //SSTF
+//                    seektime = seektime + shortestSeekTimeFirst(arrayList, initialTrack)
+//                    arrangedList = sstfSequence(arrayList, initialTrack)
+//                    Log.d("sstf", sstfSequence(arrayList, initialTrack).toString())
+//                }
+//                if (selectedAlgo.equals("SCAN")) {
+//                    //SCAN
+//                    seektime = seektime + SCAN(arrayList, initialTrack, tailtrack)
+//                    arrangedList = scanSequence()
+//                    Log.d(
+//                        "scan",
+//                        scanSequence().toString()
+//                    )
+//                }
+//                if (selectedAlgo.equals("C-SCAN")) {
+//                    //C-Scan
+//                    seektime = seektime + CSCAN(arrayList, initialTrack, tailtrack)
+//                    arrangedList = cscanSequence(arrayList, initialTrack, tailtrack)
+//                    Log.d(
+//                        "cscan",
+//                        cscanSequence(arrayList, initialTrack, tailTrack).toString()
+//                    )
+//                }
+//            },
+//            title = "Calculate"
+//        )
+//    }
+//}
 
 
 // Testing
