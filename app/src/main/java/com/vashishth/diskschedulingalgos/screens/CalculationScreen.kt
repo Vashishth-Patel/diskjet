@@ -127,11 +127,11 @@ fun InputCard(onValChange: (String) -> Unit = {}, contentPaddingValues: PaddingV
             Spacer(modifier = Modifier.height(20.dp))
 
             LazyRow(state = rememberLazyListState()) {
-                items(inputlist) {
-                    queueItem(num = it)
-                }
+                    items(inputlist) {
+                            queueItem(num = it)
+                    }
             }
-
+//TODO//
             Spacer(modifier = Modifier.height(20.dp))
 
             Row(
@@ -180,8 +180,10 @@ fun InputCard(onValChange: (String) -> Unit = {}, contentPaddingValues: PaddingV
                         arrayList.clear()
                         var i = inputlist.lastIndex
                         inputlist = inputlist - inputlist[i]
-                        inputlist.forEach {
-                            arrayList.add(it)
+                        if (inputlist.isNotEmpty()) {
+                            inputlist.forEach {
+                                arrayList.add(it)
+                            }
                         }
                     }
                 }, title = "POP")
@@ -260,7 +262,7 @@ fun InputCard(onValChange: (String) -> Unit = {}, contentPaddingValues: PaddingV
 //            SimpleRadioButtonComponent(show = show.value)
             //TODO
             Spacer(modifier = Modifier.height(10.dp))
-            if (arrangedList.isNotEmpty()) {
+            if (arrangedList.isNotEmpty() && arrangedList.size > 1) {
                 lineChartView()
             }
         }
