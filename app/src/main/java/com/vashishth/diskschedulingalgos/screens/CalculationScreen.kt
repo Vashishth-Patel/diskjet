@@ -26,6 +26,7 @@ import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.vashishth.diskschedulingalgos.Algos.*
 import com.vashishth.diskschedulingalgos.R
@@ -39,6 +40,7 @@ import com.vashishth.diskschedulingalgos.ui.theme.ButtonBlue
 import me.bytebeats.views.charts.line.LineChart
 import me.bytebeats.views.charts.line.LineChartData
 import me.bytebeats.views.charts.line.LineChartData.*
+import me.bytebeats.views.charts.line.render.point.IPointDrawer
 import me.bytebeats.views.charts.line.render.xaxis.SimpleXAxisDrawer
 import me.bytebeats.views.charts.line.render.yaxis.SimpleYAxisDrawer
 
@@ -128,11 +130,11 @@ fun InputCard(onValChange: (String) -> Unit = {}, contentPaddingValues: PaddingV
 
             LazyRow(state = rememberLazyListState()) {
                     items(inputlist) {
-                            queueItem(num = it)
+                        queueItem(num = it)
                     }
             }
 //TODO//
-            Spacer(modifier = Modifier.height(20.dp))
+            Spacer(modifier = Modifier.height(8.dp))
 
             Row(
                 horizontalArrangement = Arrangement.SpaceAround,
@@ -149,7 +151,9 @@ fun InputCard(onValChange: (String) -> Unit = {}, contentPaddingValues: PaddingV
                     arrayList.clear()
                 }
             }
-//            CalciScreen(context = context, tailTrack = tailTrack, initialTrack = initialTrack)
+
+            Spacer(modifier = Modifier.height(2.dp))
+
             //TODO
             DiskValue() {
                 if (inputlist.contains(it.toInt())) {
@@ -170,6 +174,9 @@ fun InputCard(onValChange: (String) -> Unit = {}, contentPaddingValues: PaddingV
                     Log.d("input", "$it")
                 }
             }
+
+            Spacer(modifier = Modifier.height(2.dp))
+
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Center
@@ -188,6 +195,8 @@ fun InputCard(onValChange: (String) -> Unit = {}, contentPaddingValues: PaddingV
                     }
                 }, title = "POP")
 
+                Spacer(modifier = Modifier.height(2.dp))
+
                 Row(
                     modifier = Modifier.padding(10.dp),
                     horizontalArrangement = Arrangement.SpaceAround,
@@ -196,21 +205,23 @@ fun InputCard(onValChange: (String) -> Unit = {}, contentPaddingValues: PaddingV
                     Text(text = "Total Seek Movements :")
                     Text(text = "${seektime.last()}")
                 }
-                Spacer(modifier = Modifier.height(10.dp))
+                Spacer(modifier = Modifier.height(2.dp))
                 Row(
                     horizontalArrangement = Arrangement.SpaceAround,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Text("Seek Sequence :", modifier = Modifier.padding(10.dp))
                     LazyRow(state = rememberLazyListState()) {
-                        items(arrangedList) {
-                            queueItem(it)
+                        if(arrangedList.isNotEmpty()) {
+                            items(arrangedList) {
+                                queueItem(it)
+                            }
                         }
                     }
                 }
             }
 
-            Spacer(modifier = Modifier.height(12.dp))
+            Spacer(modifier = Modifier.height(2.dp))
 
             Row(
                 horizontalArrangement = Arrangement.SpaceBetween,
@@ -429,11 +440,16 @@ fun lineChartView() {
         ),
         modifier = Modifier
             .fillMaxWidth()
-            .height(270.dp)
-            .padding(10.dp)
+            .padding(bottom = 50.dp, start = 20.dp, end = 20.dp)
             .background(Color.White, shape = RoundedCornerShape(5.dp)),
         xAxisDrawer = SimpleXAxisDrawer(),
-        yAxisDrawer = SimpleYAxisDrawer()
+        yAxisDrawer = SimpleYAxisDrawer(
+            drawLabelEvery = 2,
+            labelTextSize = 8.sp,
+            labelValueFormatter = { value -> value.toInt().toString() }
+        ),
+        //TODO//
+        horizontalOffset = 4f
     )
 }
 
