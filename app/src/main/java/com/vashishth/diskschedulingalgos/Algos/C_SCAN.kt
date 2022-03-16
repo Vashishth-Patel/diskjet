@@ -93,6 +93,6 @@ fun CSCAN(arr: ArrayList<Int>, head: Int,tail : Int) : Int{
     return seek_count
 }
 
-fun cscanSequence(arr: ArrayList<Int>, head: Int,tail : Int) : ArrayList<Int>{
+fun cscanSequence() : ArrayList<Int>{
     return csanSequence
 }

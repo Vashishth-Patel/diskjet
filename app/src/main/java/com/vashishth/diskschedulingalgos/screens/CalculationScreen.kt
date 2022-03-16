@@ -213,7 +213,9 @@ fun InputCard(onValChange: (String) -> Unit = {}, contentPaddingValues: PaddingV
                     Text("Seek Sequence :", modifier = Modifier.padding(10.dp))
                     LazyRow(state = rememberLazyListState()) {
                         if(arrangedList.isNotEmpty()) {
-                            items(arrangedList) {
+                            items(
+                                arrangedList
+                            ) {
                                 queueItem(it)
                             }
                         }
@@ -227,7 +229,9 @@ fun InputCard(onValChange: (String) -> Unit = {}, contentPaddingValues: PaddingV
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
+
                 TestDropdownMenu()
+
                 Button(
                     onClick = {
                         var tailtrack = tailTrack
@@ -240,30 +244,21 @@ fun InputCard(onValChange: (String) -> Unit = {}, contentPaddingValues: PaddingV
                         if (selectedAlgo.equals("SSTF")) {
                             //SSTF
                             seektime = seektime + shortestSeekTimeFirst(arrayList, initialTrack)
-                            arrangedList = sstfSequence(arrayList, initialTrack)
-                            Log.d("sstf", sstfSequence(arrayList, initialTrack).toString())
+                            arrangedList = sstfSequence()
                         }
                         if (selectedAlgo.equals("SCAN")) {
                             //SCAN
                             seektime = seektime + SCAN(arrayList, initialTrack, tailtrack)
                             arrangedList = scanSequence()
-                            Log.d(
-                                "scan",
-                                scanSequence().toString()
-                            )
                         }
                         if (selectedAlgo.equals("C-SCAN L-R")) {
                             //C-Scan
                             seektime = seektime + CSCAN(arrayList, initialTrack, tailtrack)
-                            arrangedList = cscanSequence(arrayList, initialTrack, tailtrack)
-                            Log.d(
-                                "cscan",
-                                cscanSequence(arrayList, initialTrack, tailTrack).toString()
-                            )
+                            arrangedList = cscanSequence()
                         }
                         if (selectedAlgo.equals("C-SCAN R-L")){
                             seektime = seektime + CSCANRL(arrayList,initialTrack,tailTrack)
-                            arrangedList = cscanSequenceRl(arrayList,initialTrack,tailTrack)
+                            arrangedList = cscanSequenceRl()
                         }
                     },
                     title = "Calculate"
