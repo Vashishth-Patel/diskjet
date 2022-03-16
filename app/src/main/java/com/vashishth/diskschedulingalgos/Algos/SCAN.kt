@@ -73,7 +73,6 @@ fun SCAN(arr: ArrayList<Int>, head: Int, tail :Int) : Int {
     seek_sequence.forEach {
         scanSequence.add(it)
     }
-
     return seek_count
 }
 

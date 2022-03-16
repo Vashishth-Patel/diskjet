@@ -11,6 +11,7 @@ class node {
 
 var sstfSequence = ArrayList<Int>()
 
+//Time Complexity - o(n)
 fun shortestSeekTimeFirst(
     request: ArrayList<Int>,
     head: Int
