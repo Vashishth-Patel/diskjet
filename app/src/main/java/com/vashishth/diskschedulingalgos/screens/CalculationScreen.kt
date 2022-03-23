@@ -246,7 +246,7 @@ fun InputCard(onValChange: (String) -> Unit = {}, contentPaddingValues: PaddingV
                             seektime = seektime + shortestSeekTimeFirst(arrayList, initialTrack)
                             arrangedList = sstfSequence()
                         }
-                        if (selectedAlgo.equals("SCAN")) {
+                        if (selectedAlgo.equals("SCAN L-R")) {
                             //SCAN
                             seektime = seektime + SCAN(arrayList, initialTrack, tailtrack)
                             arrangedList = scanSequence()
@@ -259,6 +259,10 @@ fun InputCard(onValChange: (String) -> Unit = {}, contentPaddingValues: PaddingV
                         if (selectedAlgo.equals("C-SCAN R-L")){
                             seektime = seektime + CSCANRL(arrayList,initialTrack,tailTrack)
                             arrangedList = cscanSequenceRl()
+                        }
+                        if(selectedAlgo.equals("SCAN R-L")){
+                            seektime = seektime + SCAN_RL(arrayList,initialTrack,tailTrack)
+                            arrangedList = scanSequenceRl()
                         }
                     },
                     title = "Calculate"

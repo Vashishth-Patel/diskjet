@@ -80,7 +80,8 @@ fun DropdownMenu(
 val items = listOf(
     "FCFS",
     "SSTF",
-    "SCAN",
+    "SCAN L-R",
+    "SCAN R-L",
     "C-SCAN L-R",
     "C-SCAN R-L"
 )
