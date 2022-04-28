@@ -37,7 +37,6 @@ class MainActivity : ComponentActivity() {
         }
     }
 }
-
 @Composable
 fun MyApp(content: @Composable () -> Unit){
     DiskSchedulingAlgosTheme {

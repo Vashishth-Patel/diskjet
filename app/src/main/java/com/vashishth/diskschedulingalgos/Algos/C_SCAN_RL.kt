@@ -4,6 +4,7 @@ import java.util.*
 import kotlin.collections.ArrayList
 
 var csanSequenceRl = ArrayList<Int>()
+//time complexity nlog(n)
 fun CSCANRL(arr: ArrayList<Int>, head: Int,tail : Int) : Int{
     var head = head
     var seek_count = 0
@@ -19,10 +20,7 @@ fun CSCANRL(arr: ArrayList<Int>, head: Int,tail : Int) : Int{
     left.add(0)
     right.add(tail - 1)
 
-    // Tracks on the left of the
-    // head will be serviced when
-    // once the head comes back
-    // to the beggining (left end).
+    //time complexity is O(n)
     for (i in 0 until arr.size) {
         if (arr[i] < head) left.add(arr[i])
         if (arr[i] > head) right.add(arr[i])
@@ -34,9 +32,9 @@ fun CSCANRL(arr: ArrayList<Int>, head: Int,tail : Int) : Int{
     Collections.sort(right)
     Collections.reverse(right)
 
-    // First service the requests
-    // on the right side of the
-    // head.
+
+    //time complexity is O(n)
+
     for (i in 0 until left.size) {
         cur_track = left.get(i)
 
@@ -53,8 +51,8 @@ fun CSCANRL(arr: ArrayList<Int>, head: Int,tail : Int) : Int{
         head = cur_track
     }
 
-    // Once reached the right end
-    // jump to the beggining.
+    // Once reached the left end
+    // jump to the end.
     head = tail
 
     // adding seek count for head returning from 199 to
@@ -63,6 +61,7 @@ fun CSCANRL(arr: ArrayList<Int>, head: Int,tail : Int) : Int{
 
     // Now service the requests again
     // which are left.
+    //time complexity is O(n)
     for (i in 0 until right.size) {
         cur_track = right.get(i)
 

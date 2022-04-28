@@ -6,6 +6,7 @@ import kotlin.collections.ArrayList
 
 var scanSequenceRl = ArrayList<Int>()
 
+//time complexity o(nlogn)
 fun SCAN_RL(arr: ArrayList<Int>, head: Int, tail :Int) : Int {
     var head = head
     var direction = "left"

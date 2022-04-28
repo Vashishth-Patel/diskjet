@@ -4,6 +4,8 @@ import java.util.*
 import kotlin.collections.ArrayList
 
 var csanSequence = ArrayList<Int>()
+
+//time complexity nlog(n)
 fun CSCAN(arr: ArrayList<Int>, head: Int,tail : Int) : Int{
     var head = head
     var seek_count = 0
@@ -23,6 +25,8 @@ fun CSCAN(arr: ArrayList<Int>, head: Int,tail : Int) : Int{
     // head will be serviced when
     // once the head comes back
     // to the beggining (left end).
+
+    //time complexity is O(n)
     for (i in 0 until arr.size) {
         if (arr[i] < head) left.add(arr[i])
         if (arr[i] > head) right.add(arr[i])
@@ -35,6 +39,8 @@ fun CSCAN(arr: ArrayList<Int>, head: Int,tail : Int) : Int{
     // First service the requests
     // on the right side of the
     // head.
+
+    //time complexity is O(n)
     for (i in 0 until right.size) {
         cur_track = right.get(i)
 
@@ -61,6 +67,7 @@ fun CSCAN(arr: ArrayList<Int>, head: Int,tail : Int) : Int{
 
     // Now service the requests again
     // which are left.
+    //time complexity is O(n)
     for (i in 0 until left.size) {
         cur_track = left.get(i)
 
@@ -77,15 +84,9 @@ fun CSCAN(arr: ArrayList<Int>, head: Int,tail : Int) : Int{
         // Accessed track is now the new head
         head = cur_track
     }
-//    println(
-//        "Total number of seek "
-//                + "operations = " + seek_count
-//    )
-//    println("Seek Sequence is")
-//    for (i in 0 until seek_sequence.size) {
-//        System.out.println(seek_sequence.get(i))
-//    }
+
     csanSequence.clear()
+    //time complexity is O(n)
     seek_sequence.forEach {
         csanSequence.add(it)
     }

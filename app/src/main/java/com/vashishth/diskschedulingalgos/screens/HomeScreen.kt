@@ -80,29 +80,7 @@ fun HomeScreen1(contentPadding : PaddingValues,navController: NavController){
             Spacer(modifier = Modifier.height(50.dp))
             DiskImg()
             Spacer(modifier = Modifier.height(25.dp))
-//            LazyColumn (contentPadding = contentPadding){
-//                items(1) {
-//                    detailText(
-//                        title = "Disk Scheduling",
-//                        information = "As we know, a process needs two type of time, CPU time and IO time. For I/O, it requests the Operating system to access the disk.\n" +
-//                                "\n" +
-//                                "However, the operating system must be fare enough to satisfy each request and at the same time, operating system must maintain the efficiency and speed of process execution.\n" +
-//                                "\n" +
-//                                "The technique that operating system uses to determine the request which is to be satisfied next is called disk scheduling."
-//                    )
-//                    detailText(
-//                        title = "Types of Disk Scheduling Algorithms",
-//                        information = "The list of various disks scheduling algorithm is given below. Each algorithm is carrying some advantages and disadvantages. The limitation of each algorithm leads to the evolution of a new algorithm.\n" +
-//                                "\n" +
-//                                "FCFS scheduling algorithm\n" +
-//                                "SSTF (shortest seek time first) algorithm\n" +
-//                                "SCAN scheduling\n" +
-//                                "C-SCAN scheduling\n" +
-//                                "LOOK Scheduling\n" +
-//                                "C-LOOK scheduling"
-//                    )
-//                }
-//            }
+
 
             //test
             var homedata : List<HomeData> = getHomeData()

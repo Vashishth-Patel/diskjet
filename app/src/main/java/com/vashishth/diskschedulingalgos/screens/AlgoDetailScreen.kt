@@ -10,6 +10,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.vashishth.diskschedulingalgos.component.detailScreenComp
 import com.vashishth.diskschedulingalgos.model.getAlgos
@@ -27,11 +28,11 @@ fun AlgoDetailScreen(navController: NavController, algoData: String?) {
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Icon(imageVector = Icons.Default.ArrowBack, contentDescription = "Arrow Back",
-                    modifier = Modifier.size(30.dp).clickable {
+                    modifier = Modifier.size(35.dp).clickable {
                         navController.popBackStack()
                     })
                 Spacer(modifier = Modifier.width(20.dp))
-                Text(text = algo[0].title)
+                Text(text = algo[0].title, fontSize = 30.sp)
             }
     }
     }
